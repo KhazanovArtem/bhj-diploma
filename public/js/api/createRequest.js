@@ -9,26 +9,39 @@ const createRequest = (options = {}) => {
     let data;
 
     if (options.method) {
-        data = Object.entries(options.data);
+        if (options.data) {
+            data = Object.entries(options.data);
+        }
         method = options.method;
         url = options.url;
         if (method === 'GET') {
-            for ([key, value] of data) {
-                url += key + '=' + value + '&';
+            if (options.data) {
+                this.formData = new FormData();
+                for ([key, value] of data) {
+                    url += '?' + key + '=' + value;
+                    this.formData.append(key, value);
+                }
             }
         } 
         if (method !== 'GET') {
-            this.formData = new FormData;
-            for ([key, value] of data) {
-                formData.append(key, value);
+            if (options.data) {
+                this.formData = new FormData();
+                for ([key, value] of data) {
+                    this.formData.append(key, value);
+                }
             }
+        
         }
     }
 
-    xhr.responseType = 'json';
-
     try {
         xhr.open(method, url);
+        xhr.responseType = 'json';
+        if (options.data) {
+            xhr.send(formData);
+        } else {
+            xhr.send();
+        }
         xhr.addEventListener('readystatechange', () => {
             if (xhr.readyState == xhr.DONE) {
                 options.callback(xhr.response.error, xhr.response);
@@ -37,28 +50,5 @@ const createRequest = (options = {}) => {
     } catch (error) {
         console.error(error);
     }
-
-    // if (options.method == 'GET') {
-    //     xhr.open( options.method, options.url + '?mail=' + options.data.mail + '&password=' + options.data.password );
-    //     xhr.responseType = 'json';
-    //     xhr.send();
-    // } else {
-    //     const formData = new FormData();
-
-    //     formData.append( 'mail', options.data.mail );
-    //     formData.append( 'password', options.data.password );
-        
-    //     xhr.open( options.method, options.url );
-    //     xhr.responseType = 'json';
-    //     xhr.send( formData );
-    // }
-
-    // xhr.addEventListener('readystatechange', () => {
-    //     if (xhr.readyState == xhr.DONE) {
-    //         const res = xhr.response;
-    //         options.callback(res.error, res.user);
-    //     }
-    // })
-
 
 }

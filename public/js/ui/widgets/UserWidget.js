@@ -12,6 +12,10 @@ class UserWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element){
+    if (element === null) {
+      throw  new Error("Пустой элемент");
+    }
+    this.element = element;
 
   }
 
@@ -23,6 +27,9 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update(){
+    const user = JSON.parse(User.current());
+    const name = document.querySelector('.user-name');
+    name.textContent = user.name;
 
   }
 }

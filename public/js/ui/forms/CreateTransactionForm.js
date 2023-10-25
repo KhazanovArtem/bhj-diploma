@@ -9,14 +9,36 @@ class CreateTransactionForm extends AsyncForm {
    * */
   constructor(element) {
     super(element)
+    this.renderAccountsList();
   }
 
   /**
    * Получает список счетов с помощью Account.list
    * Обновляет в форме всплывающего окна выпадающий список
    * */
-  renderAccountsList() {
-
+  renderAccountsList() {  
+    Account.list({}, (err, response) => {
+      const opt = document.querySelectorAll('option');
+      if(opt.length) {
+        for (let i = 0; i < opt.length; i++) {
+          opt[i].remove();
+        }
+      }
+      const selectincome = document.getElementById('income-accounts-list');
+      for (let i = 0; i < response.data.length; i++) {
+        const option = document.createElement('option');
+        option.setAttribute('value', response.data[i].id);
+        option.textContent = response.data[i].name;
+        selectincome.appendChild(option);
+      }
+      const selectexpense = document.getElementById('expense-accounts-list');
+      for (let i = 0; i < response.data.length; i++) {
+        const option = document.createElement('option');
+        option.setAttribute('value', response.data[i].id);
+        option.textContent = response.data[i].name;
+        selectexpense.appendChild(option);
+      }
+    });
   }
 
   /**
@@ -26,6 +48,17 @@ class CreateTransactionForm extends AsyncForm {
    * в котором находится форма
    * */
   onSubmit(data) {
-
+    Transaction.create(data, (err, response) => {
+      if (response.success) {
+        App.getModal('newIncome').close();
+        App.getModal('newExpense').close();
+        App.getPage('transactions').clear();
+        App.update();
+      }
+      if (err) {
+        throw new Error(err);
+      }
+    });
+    this.element.reset();
   }
 }

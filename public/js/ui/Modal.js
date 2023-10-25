@@ -28,7 +28,11 @@ class Modal {
     const menu = document.querySelectorAll('[data-dismiss="modal"]');
     menu.forEach(item => {
       item.onclick = () => {
-        this.onClose();
+        for (let prop in App.modals) {
+          if (App.modals[prop].element.getAttribute('style') === 'display: block') {
+            this.onClose(App.modals[prop]);
+          }
+        }
       }
     })
   }
@@ -38,14 +42,14 @@ class Modal {
    * Закрывает текущее окно (Modal.close())
    * */
   onClose(e) {
-    this.element.close();
+    e.close();
   }
   /**
    * Открывает окно: устанавливает CSS-свойство display
    * со значением «block»
    * */
   open() {
-    this.setAttribute('style', 'display: block');  
+    this.element.setAttribute('style', 'display: block');  
   }
   /**
    * Закрывает окно: удаляет CSS-свойство display

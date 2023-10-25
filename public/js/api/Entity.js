@@ -11,18 +11,13 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static list(data, callback){
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('GET', this.URL + '?mail=' + data.mail + '&password=' + data.password)
-    xhr.responseType = 'json';
-    xhr.send();
-
-    xhr.addEventListener('readystatechange', () => {
-      if (xhr.readyState == xhr.DONE) {
-          const res = xhr.response;
-          callback(res.error, res.user);
-        }
-    })
+    createRequest({
+      url: this.URL,
+      method: 'GET',
+      responseType: 'json',
+      data,
+      callback
+    });
   }
 
   /**
@@ -31,18 +26,14 @@ class Entity {
    * что наследуется от Entity)
    * */
   static create(data, callback) {
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('PUT', this.URL + '?mail=' + data.mail)
-    xhr.responseType = 'json';
-    xhr.send();
-
-    xhr.addEventListener('readystatechange', () => {
-      if (xhr.readyState == xhr.DONE) {
-          const res = xhr.response;
-          callback(res.error, res.user);
-        }
-    })
+    createRequest({
+      url: this.URL,
+      method: 'PUT',
+      responseType: 'json',
+      data,
+      callback
+    });
+    return;
   }
 
   /**
@@ -50,17 +41,12 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static remove(data, callback ) {
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('DELETE', this.URL + '?mail=' + data.mail)
-    xhr.responseType = 'json';
-    xhr.send();
-
-    xhr.addEventListener('readystatechange', () => {
-      if (xhr.readyState == xhr.DONE) {
-          const res = xhr.response;
-          callback(res.error, res.user);
-        }
-    })
+    createRequest({
+      url: this.URL,
+      method: 'DELETE',
+      responseType: 'json',
+      data,
+      callback
+    });
   }
 }

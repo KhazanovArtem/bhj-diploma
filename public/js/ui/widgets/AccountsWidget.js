@@ -14,7 +14,12 @@ class AccountsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-
+    if (!element) {
+      throw new Error ('Передан пустой элемент');
+    }
+    this.element = element;
+    this.registerEvents();
+    this.update();
   }
 
   /**
@@ -25,7 +30,17 @@ class AccountsWidget {
    * вызывает AccountsWidget.onSelectAccount()
    * */
   registerEvents() {
+    const create = document.querySelector('.create-account');
+    create.addEventListener('click', () => {
+      App.getModal('createAccount').open();
+    })
 
+    const accounts = document.querySelectorAll('.account');
+    accounts.forEach(item => {
+      item.addEventListener('click', () => {
+        this.onSelectAccount(item);
+      })
+    })
   }
 
   /**
@@ -39,7 +54,12 @@ class AccountsWidget {
    * метода renderItem()
    * */
   update() {
-
+    if (User.current()) {
+      Account.list({}, (err,response) => {
+        App.getWidget('accounts').clear();
+        App.getWidget('accounts').renderItem(response.data);
+      });
+    }
   }
 
   /**
@@ -48,7 +68,12 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-
+    const acc = document.querySelectorAll('.account');
+    if(acc.length) {      
+      for (let i = 0; i < acc.length; i++) {
+        acc[i].remove();
+      }
+    }
   }
 
   /**
@@ -59,7 +84,13 @@ class AccountsWidget {
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
   onSelectAccount( element ) {
-
+    const acc = Array.from(document.querySelectorAll('.account'));
+    for (let i in acc) {
+      acc[i].classList.remove('active');
+    }
+    element.classList.add('active');
+    App.getPage('transactions').clear();
+    App.showPage( 'transactions', { account_id: element.getAttribute('data-id')})
   }
 
   /**
@@ -68,6 +99,19 @@ class AccountsWidget {
    * item - объект с данными о счёте
    * */
   getAccountHTML(item){
+    const acc = document.createElement('li');
+    acc.classList.add('account');
+    acc.dataset.id = item.id;
+    const link = document.createElement('a');
+    link.setAttribute('href', '#');
+    const name = document.createElement('span');
+    name.textContent = item.name + ' / ';
+    const sum = document.createElement('span');
+    sum.textContent = item.sum + ' ₽';
+    link.appendChild(name);
+    link.appendChild(sum);
+    acc.appendChild(link);
+    return acc;
 
   }
 
@@ -78,6 +122,9 @@ class AccountsWidget {
    * и добавляет его внутрь элемента виджета
    * */
   renderItem(data){
-
+    for ( let i in data) {
+      this.element.appendChild(this.getAccountHTML(data[i]));
+    }
+    this.registerEvents();
   }
 }
