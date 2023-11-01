@@ -27,9 +27,8 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update(){
-    const user = JSON.parse(User.current());
+    const user = User.current();
     const name = document.querySelector('.user-name');
     name.textContent = user.name;
-
   }
 }

@@ -28,11 +28,6 @@
       "name": "Бизнес",
       "user_id": "1",
       "id": "3"
-    },
-    {
-      "name": "Наличные",
-      "user_id": "ofue6hzklo5ua9er",
-      "id": "ofue6be0lo5ualip"
     }
   ],
   "transactions": [
@@ -170,24 +165,6 @@
       "sum": 300000,
       "type": "expense",
       "user_id": "1"
-    },
-    {
-      "id": "ofue6r64lo5udc4a",
-      "type": "income",
-      "name": "От тети",
-      "sum": 500,
-      "account_id": "ofue6be0lo5ualip",
-      "user_id": "ofue6hzklo5ua9er",
-      "created_at": "2023-10-25T14:19:23.673Z"
-    },
-    {
-      "id": "ofue6jp4lo5udj55",
-      "type": "expense",
-      "name": "хлеб",
-      "sum": 25,
-      "account_id": "ofue6be0lo5ualip",
-      "user_id": "ofue6hzklo5ua9er",
-      "created_at": "2023-10-25T14:19:32.776Z"
     }
   ]
 }
